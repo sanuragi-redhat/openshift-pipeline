@@ -1,0 +1,31 @@
+apiVersion: tekton.dev/v1
+kind: Task
+metadata:
+  name: build-image
+  namespace: pipeline
+spec:
+  params:
+    - name: IMAGE
+      type: string
+      description: Image to build and push
+
+  workspaces:
+    - name: source
+
+  steps:
+    - name: build-and-push
+      image: registry.redhat.io/rhel9/buildah:latest
+      securityContext:
+        privileged: true
+      workingDir: $(workspaces.source.path)/app
+      script: |
+        #!/usr/bin/env bash
+        set -eux
+
+        buildah bud \
+          -t $(params.IMAGE) \
+          .
+
+        buildah push \
+          --tls-verify=false \
+          $(params.IMAGE)
