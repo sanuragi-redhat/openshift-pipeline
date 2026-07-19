@@ -1,0 +1,29 @@
+[lab-user@bastion ~]$ oc extract secret/openshift-gitops-cluster -n openshift-gitops --to=-
+# admin.password
+FakeMe
+
+oc edit argocd openshift-gitops -n openshift-gitops
+
+add : 
+spec:
+  applicationInstanceLabelKey: argocd.argoproj.io/instance
+  rbac:
+    defaultPolicy: role:readonly
+  resourceTrackingMethod: annotation
+
+
+oc adm policy add-role-to-user admin \
+  system:serviceaccount:openshift-gitops:openshift-gitops-argocd-application-controller \
+  -n pipeline
+
+
+oc edit configmap argocd-rbac-cm -n openshift-gitops
+data:
+  policy.csv: |
+    g, system:cluster-admins, role:admin
+    g, admin, role:admin
+  policy.default: role:readonly
+or 
+data:
+  policy.default: role:admin
+

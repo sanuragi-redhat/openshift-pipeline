@@ -1,0 +1,13 @@
+apiVersion: tekton.dev/v1
+kind: Pipeline
+metadata:
+  name: app-sise-pipeline
+spec:
+  tasks:
+    - name: echo
+      taskSpec:
+        steps:
+          - name: run
+            image: alpine
+            script: |
+              echo "Building sise app..."

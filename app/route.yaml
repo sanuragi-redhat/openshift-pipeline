@@ -1,0 +1,10 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: nginx
+spec:
+  to:
+    kind: Service
+    name: sise
+  port:
+    targetPort: 9876
