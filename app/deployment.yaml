@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: sise
-          image: image-registry.openshift-image-registry.svc:5000/pipeline/simpleservice:latest
+          image: quay.io/openshiftlabs/simpleservice:0.5.0
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 9876
